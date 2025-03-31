@@ -6,6 +6,7 @@ from scipy import stats
 import skimage.filters as skif
 from sklearn.preprocessing import normalize
 import glob
+import os 
 
 def reorder_AnnData(AnnData, descending = True):
     AnnData.obs['total_counts'] = np.array( AnnData.X.sum(axis=1) )
@@ -30,7 +31,7 @@ def read_dropest(dir_path,reorder=True):
     adata.raw = adata
     return(adata)
 
-def find_inflection(adata_in,mito_tag = "MT-",run_qc=True):
+def find_inflection(adata_in,mito_tag = "MT-",run_qc=True, save_path=None):
     if(run_qc):
         print("Calculating QC Metrics")
         adata_in.var['Mitochondrial'] = adata_in.var.index.str.startswith(mito_tag)
@@ -66,6 +67,12 @@ def find_inflection(adata_in,mito_tag = "MT-",run_qc=True):
     ax2.set_xlabel("Cell Rank")
     ax2.set_ylabel("Total Counts/N Genes By Counts")
     ax2.legend()
+    
+    if save_path:
+        os.makedirs(save_path, exist_ok=True)
+        filepath = os.path.join(save_path, "plot_find_inflection.png")
+        plt.savefig(filepath)
+        print(f"Plot saved to: {filepath}")
         
     print("Inflection point at {} for {} percentiles of greatest secant distances".format(inflection_percentiles_inds,inflection_percentiles))
     return(inflection_percentiles_inds)

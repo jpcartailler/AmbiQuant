@@ -86,7 +86,7 @@ def inspect_data( data_path, save_name, cut_off = None,
             samp = samp[0:cut_off]
     
     #make inflection point plot
-    samp_inflection = QCPipe.qc.find_inflection(samp)
+    samp_inflection = QCPipe.qc.find_inflection(samp, mito_tag = "MT-", save_path="./")
     
     #save the file in curr directory
     if(save_name):
