@@ -68,11 +68,9 @@ def find_inflection(adata_in,mito_tag = "MT-",run_qc=True, save_path=None):
     ax2.set_ylabel("Total Counts/N Genes By Counts")
     ax2.legend()
     
-    if save_path:
-        os.makedirs(save_path, exist_ok=True)
-        filepath = os.path.join(save_path, "plot_find_inflection.png")
-        plt.savefig(filepath)
-        print(f"Plot saved to: {filepath}")
+    filepath = os.path.join("plot_find_inflection.png")
+    plt.savefig(filepath)
+    print(f"Plot saved to: {filepath}")
         
     print("Inflection point at {} for {} percentiles of greatest secant distances".format(inflection_percentiles_inds,inflection_percentiles))
     return(inflection_percentiles_inds)
@@ -91,7 +89,14 @@ def relative_diversity(adata_in,zscore_minimum = 0,log_scale=True):
     ax0.vlines(diversity_cutoff,0,max(hist_plot_div[0]),color='green')
     ax0.set_title("Relative Transcript Diversity")
     adata_in.obs['relative_transcript_diversity_threshold'] = adata_in.obs['n_genes_by_counts_zscore']>=diversity_cutoff
+    
+    filepath = os.path.join("plot_relative_diversity.png")
+    plt.savefig(filepath)
+    print(f"Plot saved to: {filepath}")
+    
     return(adata_in)
+
+
 
 def subset_cleanup(adata_in,selection='Cell_Selection'):
     adata_in.X = adata_in.raw.X.copy()
